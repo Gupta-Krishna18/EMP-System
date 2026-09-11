@@ -42,9 +42,17 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         // 1. Create Roles
-        Role adminRole = new Role("ADMIN");
-        Role managerRole = new Role("MANAGER");
-        Role employeeRole = new Role("EMPLOYEE");
+        Role adminRole = new Role();
+        adminRole.setName("ADMIN");
+        adminRole.setDescription("Full system access");
+
+        Role managerRole = new Role();
+        managerRole.setName("MANAGER");
+        managerRole.setDescription("Project and task management");
+
+        Role employeeRole = new Role();
+        employeeRole.setName("EMPLOYEE");
+        employeeRole.setDescription("Basic employee access");
 
         roleRepository.save(adminRole);
         roleRepository.save(managerRole);
