@@ -9,6 +9,7 @@ import com.krishna.ems.repository.EmployeeRepository;
 import com.krishna.ems.repository.ProjectRepository;
 import com.krishna.ems.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+import com.krishna.ems.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class TaskService {
         Project project = projectRepository.findById(
                 request.getProjectId()
         ).orElseThrow(() ->
-                new RuntimeException(
+                new ResourceNotFoundException(
                         "Project not found with id: "
                                 + request.getProjectId()
                 )
@@ -49,7 +50,7 @@ public class TaskService {
         Employee employee = employeeRepository.findById(
                 request.getAssignedToId()
         ).orElseThrow(() ->
-                new RuntimeException(
+                new ResourceNotFoundException(
                         "Employee not found with id: "
                                 + request.getAssignedToId()
                 )
@@ -94,7 +95,7 @@ public class TaskService {
 
         Task task = taskRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Task not found with id: " + id
                         )
                 );
@@ -111,7 +112,7 @@ public class TaskService {
         // Find existing task
         Task task = taskRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Task not found with id: " + id
                         )
                 );
@@ -121,7 +122,7 @@ public class TaskService {
         Project project = projectRepository.findById(
                 request.getProjectId()
         ).orElseThrow(() ->
-                new RuntimeException(
+                new ResourceNotFoundException(
                         "Project not found with id: "
                                 + request.getProjectId()
                 )
@@ -132,7 +133,7 @@ public class TaskService {
         Employee employee = employeeRepository.findById(
                 request.getAssignedToId()
         ).orElseThrow(() ->
-                new RuntimeException(
+                new ResourceNotFoundException(
                         "Employee not found with id: "
                                 + request.getAssignedToId()
                 )
@@ -163,7 +164,7 @@ public class TaskService {
 
         Task task = taskRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Task not found with id: " + id
                         )
                 );

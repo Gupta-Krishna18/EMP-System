@@ -4,9 +4,11 @@ import com.krishna.ems.dto.employee.EmployeeRequest;
 import com.krishna.ems.dto.employee.EmployeeResponse;
 import com.krishna.ems.entity.Department;
 import com.krishna.ems.entity.Employee;
+import com.krishna.ems.exception.DuplicateResourceException;
 import com.krishna.ems.repository.DepartmentRepository;
 import com.krishna.ems.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
+import com.krishna.ems.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class EmployeeService {
 
         // Check duplicate email
         if (employeeRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException(
+            throw new DuplicateResourceException(
                     "Employee already exists with email: " + request.getEmail()
             );
         }
@@ -37,7 +39,7 @@ public class EmployeeService {
         // Find department
         Department department = departmentRepository.findById(request.getDepartmentId())
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Department not found with id: " + request.getDepartmentId()
                         )
                 );
@@ -78,7 +80,7 @@ public class EmployeeService {
 
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Employee not found with id: " + id
                         )
                 );
@@ -94,7 +96,7 @@ public class EmployeeService {
 
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Employee not found with id: " + id
                         )
                 );
@@ -103,7 +105,7 @@ public class EmployeeService {
         if (!employee.getEmail().equals(request.getEmail())
                 && employeeRepository.existsByEmail(request.getEmail())) {
 
-            throw new RuntimeException(
+            throw new ResourceNotFoundException(
                     "Employee already exists with email: "
                             + request.getEmail()
             );
@@ -113,7 +115,7 @@ public class EmployeeService {
         Department department = departmentRepository.findById(
                 request.getDepartmentId()
         ).orElseThrow(() ->
-                new RuntimeException(
+                new ResourceNotFoundException(
                         "Department not found with id: "
                                 + request.getDepartmentId()
                 )
@@ -142,7 +144,7 @@ public class EmployeeService {
 
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Employee not found with id: " + id
                         )
                 );

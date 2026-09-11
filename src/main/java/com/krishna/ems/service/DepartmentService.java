@@ -3,8 +3,10 @@ package com.krishna.ems.service;
 import com.krishna.ems.dto.department.DepartmentRequest;
 import com.krishna.ems.dto.department.DepartmentResponse;
 import com.krishna.ems.entity.Department;
+import com.krishna.ems.exception.DuplicateResourceException;
 import com.krishna.ems.repository.DepartmentRepository;
 import org.springframework.stereotype.Service;
+import com.krishna.ems.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class DepartmentService {
     ) {
 
         if (departmentRepository.existsByName(request.getName())) {
-            throw new RuntimeException(
+            throw new DuplicateResourceException(
                     "Department already exists: " + request.getName()
             );
         }
@@ -54,7 +56,7 @@ public class DepartmentService {
         Department department =
                 departmentRepository.findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException(
+                                new ResourceNotFoundException(
                                         "Department not found with id: " + id
                                 )
                         );
@@ -71,7 +73,7 @@ public class DepartmentService {
         Department department =
                 departmentRepository.findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException(
+                                new ResourceNotFoundException(
                                         "Department not found with id: " + id
                                 )
                         );
@@ -79,7 +81,7 @@ public class DepartmentService {
         if (!department.getName().equals(request.getName())
                 && departmentRepository.existsByName(request.getName())) {
 
-            throw new RuntimeException(
+            throw new ResourceNotFoundException(
                     "Department already exists: " + request.getName()
             );
         }
@@ -99,7 +101,7 @@ public class DepartmentService {
         Department department =
                 departmentRepository.findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException(
+                                new ResourceNotFoundException(
                                         "Department not found with id: " + id
                                 )
                         );

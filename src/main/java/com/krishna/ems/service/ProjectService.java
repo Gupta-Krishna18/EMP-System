@@ -7,6 +7,7 @@ import com.krishna.ems.entity.Project;
 import com.krishna.ems.repository.EmployeeRepository;
 import com.krishna.ems.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
+import com.krishna.ems.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class ProjectService {
         Employee manager = employeeRepository.findById(
                 request.getManagerId()
         ).orElseThrow(() ->
-                new RuntimeException(
+                new ResourceNotFoundException(
                         "Manager employee not found with id: "
                                 + request.getManagerId()
                 )
@@ -79,7 +80,7 @@ public class ProjectService {
 
         Project project = projectRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Project not found with id: " + id
                         )
                 );
@@ -96,7 +97,7 @@ public class ProjectService {
         // Find existing project
         Project project = projectRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Project not found with id: " + id
                         )
                 );
@@ -111,7 +112,7 @@ public class ProjectService {
         Employee manager = employeeRepository.findById(
                 request.getManagerId()
         ).orElseThrow(() ->
-                new RuntimeException(
+                new ResourceNotFoundException(
                         "Manager employee not found with id: "
                                 + request.getManagerId()
                 )
@@ -139,7 +140,7 @@ public class ProjectService {
 
         Project project = projectRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Project not found with id: " + id
                         )
                 );
@@ -154,7 +155,7 @@ public class ProjectService {
             java.time.LocalDate endDate) {
 
         if (endDate.isBefore(startDate)) {
-            throw new RuntimeException(
+            throw new ResourceNotFoundException(
                     "End date cannot be before start date"
             );
         }
