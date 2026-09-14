@@ -4,11 +4,12 @@ import com.krishna.ems.dto.project.ProjectRequest;
 import com.krishna.ems.dto.project.ProjectResponse;
 import com.krishna.ems.entity.Employee;
 import com.krishna.ems.entity.Project;
+import com.krishna.ems.exception.ResourceNotFoundException;
 import com.krishna.ems.repository.EmployeeRepository;
 import com.krishna.ems.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
-import com.krishna.ems.exception.ResourceNotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,7 +27,33 @@ public class ProjectService {
     }
 
 
+    // =========================================================
+    // BUSINESS API
+    // GET PROJECTS BY MANAGER ID
+    // =========================================================
+
+    public List<ProjectResponse> getProjectsByManagerId(Long employeeId) {
+
+        // First check whether Employee exists
+        employeeRepository.findById(employeeId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Employee not found with id: " + employeeId
+                        )
+                );
+
+        // Find all projects managed by this employee
+        return projectRepository.findByManagerId(employeeId)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+
+    // =========================================================
     // CREATE
+    // =========================================================
+
     public ProjectResponse createProject(ProjectRequest request) {
 
         // Check start date and end date
@@ -34,6 +61,7 @@ public class ProjectService {
                 request.getStartDate(),
                 request.getEndDate()
         );
+
 
         // Find manager
         Employee manager = employeeRepository.findById(
@@ -44,6 +72,7 @@ public class ProjectService {
                                 + request.getManagerId()
                 )
         );
+
 
         // Create Project entity
         Project project = new Project();
@@ -57,15 +86,21 @@ public class ProjectService {
         // Set Employee as Project manager
         project.setManager(manager);
 
+
         // Save project
-        Project savedProject = projectRepository.save(project);
+        Project savedProject =
+                projectRepository.save(project);
+
 
         // Entity → Response DTO
         return mapToResponse(savedProject);
     }
 
 
+    // =========================================================
     // GET ALL
+    // =========================================================
+
     public List<ProjectResponse> getAllProjects() {
 
         return projectRepository.findAll()
@@ -75,7 +110,10 @@ public class ProjectService {
     }
 
 
+    // =========================================================
     // GET BY ID
+    // =========================================================
+
     public ProjectResponse getProjectById(Long id) {
 
         Project project = projectRepository.findById(id)
@@ -89,7 +127,10 @@ public class ProjectService {
     }
 
 
+    // =========================================================
     // UPDATE
+    // =========================================================
+
     public ProjectResponse updateProject(
             Long id,
             ProjectRequest request) {
@@ -102,11 +143,13 @@ public class ProjectService {
                         )
                 );
 
+
         // Validate dates
         validateProjectDates(
                 request.getStartDate(),
                 request.getEndDate()
         );
+
 
         // Find new manager
         Employee manager = employeeRepository.findById(
@@ -118,6 +161,7 @@ public class ProjectService {
                 )
         );
 
+
         // Update project fields
         project.setName(request.getName());
         project.setDescription(request.getDescription());
@@ -125,17 +169,24 @@ public class ProjectService {
         project.setEndDate(request.getEndDate());
         project.setStatus(request.getStatus());
 
+
         // Update manager
         project.setManager(manager);
 
+
         // Save updated project
-        Project updatedProject = projectRepository.save(project);
+        Project updatedProject =
+                projectRepository.save(project);
+
 
         return mapToResponse(updatedProject);
     }
 
 
+    // =========================================================
     // DELETE
+    // =========================================================
+
     public void deleteProject(Long id) {
 
         Project project = projectRepository.findById(id)
@@ -149,12 +200,16 @@ public class ProjectService {
     }
 
 
+    // =========================================================
     // BUSINESS VALIDATION
+    // =========================================================
+
     private void validateProjectDates(
-            java.time.LocalDate startDate,
-            java.time.LocalDate endDate) {
+            LocalDate startDate,
+            LocalDate endDate) {
 
         if (endDate.isBefore(startDate)) {
+
             throw new ResourceNotFoundException(
                     "End date cannot be before start date"
             );
@@ -162,7 +217,10 @@ public class ProjectService {
     }
 
 
+    // =========================================================
     // ENTITY → RESPONSE DTO
+    // =========================================================
+
     private ProjectResponse mapToResponse(Project project) {
 
         return new ProjectResponse(
@@ -172,7 +230,9 @@ public class ProjectService {
                 project.getStartDate(),
                 project.getEndDate(),
                 project.getStatus(),
+
                 project.getManager().getId(),
+
                 project.getManager().getFirstName()
                         + " "
                         + project.getManager().getLastName()

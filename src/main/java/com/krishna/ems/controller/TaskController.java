@@ -22,7 +22,10 @@ public class TaskController {
     }
 
 
+    // =========================================================
     // CREATE
+    // =========================================================
+
     @PostMapping
     public ResponseEntity<TaskResponse> createTask(
             @Valid @RequestBody TaskRequest request) {
@@ -36,7 +39,10 @@ public class TaskController {
     }
 
 
+    // =========================================================
     // GET ALL
+    // =========================================================
+
     @GetMapping
     public ResponseEntity<List<TaskResponse>> getAllTasks() {
 
@@ -46,7 +52,40 @@ public class TaskController {
     }
 
 
+    // =========================================================
+    // GET TASKS BY PROJECT
+    // =========================================================
+    // Keep this BEFORE /{id}
+
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<TaskResponse>> getTasksByProject(
+            @PathVariable Long projectId) {
+
+        return ResponseEntity.ok(
+                taskService.getTasksByProjectId(projectId)
+        );
+    }
+
+
+    // =========================================================
+    // GET TASKS BY EMPLOYEE
+    // =========================================================
+    // Keep this BEFORE /{id}
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<TaskResponse>> getTasksByEmployee(
+            @PathVariable Long employeeId) {
+
+        return ResponseEntity.ok(
+                taskService.getTasksByEmployeeId(employeeId)
+        );
+    }
+
+
+    // =========================================================
     // GET BY ID
+    // =========================================================
+
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponse> getTaskById(
             @PathVariable Long id) {
@@ -57,7 +96,10 @@ public class TaskController {
     }
 
 
+    // =========================================================
     // UPDATE
+    // =========================================================
+
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponse> updateTask(
             @PathVariable Long id,
@@ -69,7 +111,10 @@ public class TaskController {
     }
 
 
+    // =========================================================
     // DELETE
+    // =========================================================
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(
             @PathVariable Long id) {

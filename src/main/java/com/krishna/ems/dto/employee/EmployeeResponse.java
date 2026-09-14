@@ -15,6 +15,10 @@ public class EmployeeResponse {
     private Long departmentId;
     private String departmentName;
 
+    private Long userId;
+    private String username;
+    private String roleName;
+
     public EmployeeResponse() {
     }
 
@@ -27,7 +31,10 @@ public class EmployeeResponse {
             String designation,
             LocalDate joiningDate,
             Long departmentId,
-            String departmentName) {
+            String departmentName,
+            Long userId,
+            String username,
+            String roleName) {
 
         this.id = id;
         this.firstName = firstName;
@@ -38,6 +45,9 @@ public class EmployeeResponse {
         this.joiningDate = joiningDate;
         this.departmentId = departmentId;
         this.departmentName = departmentName;
+        this.userId = userId;
+        this.username = username;
+        this.roleName = roleName;
     }
 
     public Long getId() {
@@ -74,5 +84,17 @@ public class EmployeeResponse {
 
     public String getDepartmentName() {
         return departmentName;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getRoleName() {
+        return roleName;
     }
 }

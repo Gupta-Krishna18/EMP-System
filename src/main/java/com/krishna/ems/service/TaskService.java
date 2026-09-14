@@ -5,11 +5,11 @@ import com.krishna.ems.dto.task.TaskResponse;
 import com.krishna.ems.entity.Employee;
 import com.krishna.ems.entity.Project;
 import com.krishna.ems.entity.Task;
+import com.krishna.ems.exception.ResourceNotFoundException;
 import com.krishna.ems.repository.EmployeeRepository;
 import com.krishna.ems.repository.ProjectRepository;
 import com.krishna.ems.repository.TaskRepository;
 import org.springframework.stereotype.Service;
-import com.krishna.ems.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -32,7 +32,10 @@ public class TaskService {
     }
 
 
+    // =========================================================
     // CREATE
+    // =========================================================
+
     public TaskResponse createTask(TaskRequest request) {
 
         // Find project
@@ -80,7 +83,10 @@ public class TaskService {
     }
 
 
+    // =========================================================
     // GET ALL
+    // =========================================================
+
     public List<TaskResponse> getAllTasks() {
 
         return taskRepository.findAll()
@@ -90,7 +96,10 @@ public class TaskService {
     }
 
 
+    // =========================================================
     // GET BY ID
+    // =========================================================
+
     public TaskResponse getTaskById(Long id) {
 
         Task task = taskRepository.findById(id)
@@ -104,7 +113,58 @@ public class TaskService {
     }
 
 
+    // =========================================================
+    // GET TASKS BY PROJECT ID
+    // =========================================================
+
+    public List<TaskResponse> getTasksByProjectId(Long projectId) {
+
+        // First verify that the project exists
+        projectRepository.findById(projectId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Project not found with id: "
+                                        + projectId
+                        )
+                );
+
+
+        // Find all tasks belonging to this project
+        return taskRepository.findByProjectId(projectId)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+
+    // =========================================================
+    // GET TASKS BY EMPLOYEE ID
+    // =========================================================
+
+    public List<TaskResponse> getTasksByEmployeeId(Long employeeId) {
+
+        // First verify that the employee exists
+        employeeRepository.findById(employeeId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Employee not found with id: "
+                                        + employeeId
+                        )
+                );
+
+
+        // Find all tasks assigned to this employee
+        return taskRepository.findByAssignedToId(employeeId)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+
+    // =========================================================
     // UPDATE
+    // =========================================================
+
     public TaskResponse updateTask(
             Long id,
             TaskRequest request) {
@@ -159,7 +219,10 @@ public class TaskService {
     }
 
 
+    // =========================================================
     // DELETE
+    // =========================================================
+
     public void deleteTask(Long id) {
 
         Task task = taskRepository.findById(id)
@@ -173,7 +236,10 @@ public class TaskService {
     }
 
 
+    // =========================================================
     // ENTITY → RESPONSE DTO
+    // =========================================================
+
     private TaskResponse mapToResponse(Task task) {
 
         return new TaskResponse(

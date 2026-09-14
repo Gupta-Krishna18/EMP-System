@@ -21,7 +21,10 @@ public class EmployeeController {
     }
 
 
+    // =========================================================
     // CREATE
+    // =========================================================
+
     @PostMapping
     public ResponseEntity<EmployeeResponse> createEmployee(
             @Valid @RequestBody EmployeeRequest request) {
@@ -35,7 +38,10 @@ public class EmployeeController {
     }
 
 
+    // =========================================================
     // GET ALL
+    // =========================================================
+
     @GetMapping
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
 
@@ -45,7 +51,25 @@ public class EmployeeController {
     }
 
 
-    // GET BY ID
+    // =========================================================
+    // GET EMPLOYEE BY USER ID
+    // =========================================================
+    // IMPORTANT: Keep this before /{id}
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<EmployeeResponse> getEmployeeByUserId(
+            @PathVariable Long userId) {
+
+        return ResponseEntity.ok(
+                employeeService.getEmployeeByUserId(userId)
+        );
+    }
+
+
+    // =========================================================
+    // GET BY EMPLOYEE ID
+    // =========================================================
+
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeResponse> getEmployeeById(
             @PathVariable Long id) {
@@ -56,7 +80,10 @@ public class EmployeeController {
     }
 
 
+    // =========================================================
     // UPDATE
+    // =========================================================
+
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(
             @PathVariable Long id,
@@ -68,7 +95,10 @@ public class EmployeeController {
     }
 
 
+    // =========================================================
     // DELETE
+    // =========================================================
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(
             @PathVariable Long id) {

@@ -21,7 +21,10 @@ public class ProjectController {
     }
 
 
+    // =========================================================
     // CREATE
+    // =========================================================
+
     @PostMapping
     public ResponseEntity<ProjectResponse> createProject(
             @Valid @RequestBody ProjectRequest request) {
@@ -35,7 +38,10 @@ public class ProjectController {
     }
 
 
+    // =========================================================
     // GET ALL
+    // =========================================================
+
     @GetMapping
     public ResponseEntity<List<ProjectResponse>> getAllProjects() {
 
@@ -45,7 +51,25 @@ public class ProjectController {
     }
 
 
+    // =========================================================
+    // BUSINESS API
+    // GET PROJECTS BY MANAGER
+    // =========================================================
+
+    @GetMapping("/manager/{employeeId}")
+    public ResponseEntity<List<ProjectResponse>> getProjectsByManager(
+            @PathVariable Long employeeId) {
+
+        return ResponseEntity.ok(
+                projectService.getProjectsByManagerId(employeeId)
+        );
+    }
+
+
+    // =========================================================
     // GET BY ID
+    // =========================================================
+
     @GetMapping("/{id}")
     public ResponseEntity<ProjectResponse> getProjectById(
             @PathVariable Long id) {
@@ -56,7 +80,10 @@ public class ProjectController {
     }
 
 
+    // =========================================================
     // UPDATE
+    // =========================================================
+
     @PutMapping("/{id}")
     public ResponseEntity<ProjectResponse> updateProject(
             @PathVariable Long id,
@@ -68,7 +95,10 @@ public class ProjectController {
     }
 
 
+    // =========================================================
     // DELETE
+    // =========================================================
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(
             @PathVariable Long id) {

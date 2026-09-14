@@ -11,11 +11,19 @@ import java.time.LocalDate;
 public class EmployeeRequest {
 
     @NotBlank(message = "First name is required")
-    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
+    @Size(
+            min = 2,
+            max = 50,
+            message = "First name must be between 2 and 50 characters"
+    )
     private String firstName;
 
     @NotBlank(message = "Last name is required")
-    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
+    @Size(
+            min = 2,
+            max = 50,
+            message = "Last name must be between 2 and 50 characters"
+    )
     private String lastName;
 
     @NotBlank(message = "Email is required")
@@ -30,7 +38,11 @@ public class EmployeeRequest {
     private String phone;
 
     @NotBlank(message = "Designation is required")
-    @Size(min = 2, max = 100, message = "Designation must be between 2 and 100 characters")
+    @Size(
+            min = 2,
+            max = 100,
+            message = "Designation must be between 2 and 100 characters"
+    )
     private String designation;
 
     @NotNull(message = "Joining date is required")
@@ -38,6 +50,10 @@ public class EmployeeRequest {
 
     @NotNull(message = "Department ID is required")
     private Long departmentId;
+
+    // Optional for now.
+    // An Employee can exist without a User account.
+    private Long userId;
 
     public EmployeeRequest() {
     }
@@ -96,5 +112,13 @@ public class EmployeeRequest {
 
     public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
