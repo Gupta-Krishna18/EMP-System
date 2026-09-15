@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.krishna.ems.dto.task.TaskStatusRequest;
 
 import java.util.List;
 
@@ -83,6 +84,24 @@ public class TaskController {
 
 
     // =========================================================
+    // PHASE 8.1 - ASSIGN / REASSIGN TASK
+    // =========================================================
+
+    @PutMapping("/{taskId}/assign/{employeeId}")
+    public ResponseEntity<TaskResponse> assignTask(
+            @PathVariable Long taskId,
+            @PathVariable Long employeeId) {
+
+        return ResponseEntity.ok(
+                taskService.assignTask(
+                        taskId,
+                        employeeId
+                )
+        );
+    }
+
+
+    // =========================================================
     // GET BY ID
     // =========================================================
 
@@ -107,6 +126,17 @@ public class TaskController {
 
         return ResponseEntity.ok(
                 taskService.updateTask(id, request)
+        );
+    }
+
+
+    @PutMapping("/{taskId}/status")
+    public ResponseEntity<TaskResponse> changeTaskStatus(
+            @PathVariable Long taskId,
+            @Valid @RequestBody TaskStatusRequest request) {
+
+        return ResponseEntity.ok(
+                taskService.changeTaskStatus(taskId, request)
         );
     }
 

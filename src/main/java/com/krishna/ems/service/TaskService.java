@@ -10,6 +10,7 @@ import com.krishna.ems.repository.EmployeeRepository;
 import com.krishna.ems.repository.ProjectRepository;
 import com.krishna.ems.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+import com.krishna.ems.dto.task.TaskStatusRequest;
 
 import java.util.List;
 
@@ -19,7 +20,6 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
     private final EmployeeRepository employeeRepository;
-
 
     public TaskService(
             TaskRepository taskRepository,
@@ -158,6 +158,66 @@ public class TaskService {
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
+    }
+
+
+    // =========================================================
+    // PHASE 8.1 - ASSIGN / REASSIGN TASK
+    // =========================================================
+
+    public TaskResponse assignTask(
+            Long taskId,
+            Long employeeId) {
+
+        // Find existing task
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Task not found with id: " + taskId
+                        )
+                );
+
+
+        // Find employee
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Employee not found with id: "
+                                        + employeeId
+                        )
+                );
+
+
+        // Assign employee to task
+        task.setAssignedTo(employee);
+
+
+        // Save updated task
+        Task updatedTask = taskRepository.save(task);
+
+
+        // Entity → Response DTO
+        return mapToResponse(updatedTask);
+    }
+
+
+
+    public TaskResponse changeTaskStatus(
+            Long taskId,
+            TaskStatusRequest request) {
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Task not found with id: " + taskId
+                        )
+                );
+
+        task.setStatus(request.getStatus());
+
+        Task updatedTask = taskRepository.save(task);
+
+        return mapToResponse(updatedTask);
     }
 
 
