@@ -5,6 +5,7 @@ import com.krishna.ems.dto.task.TaskResponse;
 import com.krishna.ems.entity.Employee;
 import com.krishna.ems.entity.Project;
 import com.krishna.ems.entity.Task;
+import com.krishna.ems.entity.TaskStatus;
 import com.krishna.ems.exception.ResourceNotFoundException;
 import com.krishna.ems.repository.EmployeeRepository;
 import com.krishna.ems.repository.ProjectRepository;
@@ -292,6 +293,22 @@ public class TaskService {
                 );
 
         task.setPriority(request.getPriority());
+
+        Task updatedTask = taskRepository.save(task);
+
+        return mapToResponse(updatedTask);
+    }
+
+    public TaskResponse completeTask(Long taskId) {
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Task not found with id: " + taskId
+                        )
+                );
+
+        task.setStatus(TaskStatus.COMPLETED);
 
         Task updatedTask = taskRepository.save(task);
 

@@ -151,6 +151,15 @@ public class TaskController {
         );
     }
 
+    @PutMapping("/{taskId}/complete")
+    public ResponseEntity<TaskResponse> completeTask(
+            @PathVariable Long taskId) {
+
+        return ResponseEntity.ok(
+                taskService.completeTask(taskId)
+        );
+    }
+
 
     // =========================================================
     // DELETE
