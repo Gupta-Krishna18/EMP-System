@@ -11,6 +11,7 @@ import com.krishna.ems.repository.ProjectRepository;
 import com.krishna.ems.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 import com.krishna.ems.dto.task.TaskStatusRequest;
+import com.krishna.ems.dto.task.TaskPriorityRequest;
 
 import java.util.List;
 
@@ -273,6 +274,25 @@ public class TaskService {
 
 
         // Save
+        Task updatedTask = taskRepository.save(task);
+
+        return mapToResponse(updatedTask);
+    }
+
+
+    public TaskResponse changeTaskPriority(
+            Long taskId,
+            TaskPriorityRequest request) {
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Task not found with id: " + taskId
+                        )
+                );
+
+        task.setPriority(request.getPriority());
+
         Task updatedTask = taskRepository.save(task);
 
         return mapToResponse(updatedTask);

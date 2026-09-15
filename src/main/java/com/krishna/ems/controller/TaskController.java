@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.krishna.ems.dto.task.TaskStatusRequest;
+import com.krishna.ems.dto.task.TaskPriorityRequest;
 
 import java.util.List;
 
@@ -137,6 +138,16 @@ public class TaskController {
 
         return ResponseEntity.ok(
                 taskService.changeTaskStatus(taskId, request)
+        );
+    }
+
+    @PutMapping("/{taskId}/priority")
+    public ResponseEntity<TaskResponse> changeTaskPriority(
+            @PathVariable Long taskId,
+            @Valid @RequestBody TaskPriorityRequest request) {
+
+        return ResponseEntity.ok(
+                taskService.changeTaskPriority(taskId, request)
         );
     }
 
