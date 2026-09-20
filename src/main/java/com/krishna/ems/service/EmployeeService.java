@@ -10,6 +10,9 @@ import com.krishna.ems.exception.ResourceNotFoundException;
 import com.krishna.ems.repository.DepartmentRepository;
 import com.krishna.ems.repository.EmployeeRepository;
 import com.krishna.ems.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -319,6 +322,36 @@ public class EmployeeService {
                 userId,
                 username,
                 roleName
+        );
+    }
+
+    public List<EmployeeResponse> searchEmployees(
+            String keyword) {
+
+        List<Employee> employees =
+                employeeRepository
+                        .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+                                keyword,
+                                keyword
+                        );
+
+        return employees.stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    public Page<EmployeeResponse> getEmployees(
+            int page,
+            int size) {
+
+        Pageable pageable =
+                PageRequest.of(page, size);
+
+        Page<Employee> employeePage =
+                employeeRepository.findAll(pageable);
+
+        return employeePage.map(
+                this::mapToResponse
         );
     }
 }

@@ -4,10 +4,11 @@ import com.krishna.ems.dto.employee.EmployeeRequest;
 import com.krishna.ems.dto.employee.EmployeeResponse;
 import com.krishna.ems.service.EmployeeService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @RestController
@@ -106,5 +107,25 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<EmployeeResponse>> searchEmployees(
+            @RequestParam String keyword) {
+
+        return ResponseEntity.ok(
+                employeeService.searchEmployees(keyword)
+        );
+    }
+
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<EmployeeResponse>> getEmployees(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(
+                employeeService.getEmployees(page, size)
+        );
     }
 }
